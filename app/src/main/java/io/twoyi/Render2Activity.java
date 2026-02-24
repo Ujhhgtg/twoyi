@@ -4,18 +4,6 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-/*
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at https://mozilla.org/MPL/2.0/.
- */
-
-/*
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at https://mozilla.org/MPL/2.0/.
- */
-
 package io.twoyi;
 
 import android.app.Activity;
@@ -198,30 +186,26 @@ public class Render2Activity extends Activity implements View.OnTouchListener {
     }
 
     private void showBootingProcedure() {
-        // mLoadingText.setText(R.string.booting_tips);
         mLoadingText.setVisibility(View.GONE);
         mBootLogView.setVisibility(View.VISIBLE);
         new Thread(() -> {
+            boolean success = false;
+            try {
+                success = TwoyiStatusManager.getInstance().waitBoot(15, TimeUnit.SECONDS);
+            } catch (Throwable ignored) {
+            }
 
-            if (true) {
-                boolean success = false;
-                try {
-                    success = TwoyiStatusManager.getInstance().waitBoot(15, TimeUnit.SECONDS);
-                } catch (Throwable ignored) {
-                }
+            if (!success) {
+                LogEvents.trackBootFailure(getApplicationContext());
 
-                if (!success) {
-                    LogEvents.trackBootFailure(getApplicationContext());
+                runOnUiThread(() -> Toast.makeText(getApplicationContext(), R.string.boot_failed, Toast.LENGTH_SHORT).show());
 
-                    runOnUiThread(() -> Toast.makeText(getApplicationContext(), R.string.boot_failed, Toast.LENGTH_SHORT).show());
+                // waiting for track
+                SystemClock.sleep(3000);
 
-                    // waiting for track
-                    SystemClock.sleep(3000);
-
-                    finish();
-                    System.exit(0);
-                    return;
-                }
+                finish();
+                System.exit(0);
+                return;
             }
 
             runOnUiThread(() -> {
@@ -272,7 +256,7 @@ public class Render2Activity extends Activity implements View.OnTouchListener {
         for (Display.Mode supportedMode : supportedModes) {
             float refreshRate = supportedMode.getRefreshRate();
             if (refreshRate > fps) {
-                // fps = refreshRate;
+                fps = refreshRate;
             }
         }
 

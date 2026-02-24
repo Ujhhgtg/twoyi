@@ -49,6 +49,9 @@ public class IOUtils {
         boolean success = true;
         if (dir.isDirectory()) {
             String[] children = dir.list();
+            if (children == null) {
+                return dir.delete();
+            }
             for (String file : children) {
                 boolean ret = deleteDir(new File(dir, file));
                 if (!ret) {

@@ -4,18 +4,6 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-/*
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at https://mozilla.org/MPL/2.0/.
- */
-
-/*
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at https://mozilla.org/MPL/2.0/.
- */
-
 package io.twoyi;
 
 import android.content.Context;
@@ -191,6 +179,9 @@ public class BootLogTexture extends TextureView implements TextureView.SurfaceTe
         Canvas canvas = null;
         try {
             canvas = lockCanvas();
+            if (canvas == null) {
+                return;
+            }
 
             // clear canvas
             canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
@@ -204,6 +195,10 @@ public class BootLogTexture extends TextureView implements TextureView.SurfaceTe
 
             int count = 0;
             for (String log : mSnapShot) {
+                if (log.isEmpty()) {
+                    count++;
+                    continue;
+                }
 
                 char chr = log.charAt(0);
 
@@ -212,7 +207,8 @@ public class BootLogTexture extends TextureView implements TextureView.SurfaceTe
                     paint = mDefaultPaint;
                 }
 
-                canvas.drawText(log, 0, count++ * 20, paint);
+                canvas.drawText(log, 0, (count + 1) * 20, paint);
+                count++;
             }
 
         } finally {

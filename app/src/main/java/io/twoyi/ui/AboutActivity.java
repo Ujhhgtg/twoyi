@@ -209,7 +209,11 @@ public class AboutActivity extends AppCompatActivity {
                     .setPositiveButton(R.string.feedback_ok, (dialog, which) -> {
                         Uri uri = Uri.parse("mailto:" + email);
                         Intent intent = new Intent(Intent.ACTION_SENDTO, uri);
-                        intent.putExtra(Intent.EXTRA_SUBJECT, title); // 主题
+                        intent.putExtra(Intent.EXTRA_SUBJECT, title);
+                        try {
+                            startActivity(intent);
+                        } catch (Throwable ignored) {
+                        }
                     }).setNegativeButton(R.string.read_faq_text, (dialog, which) -> {
                         UIHelper.showFAQ(this);
                     })
