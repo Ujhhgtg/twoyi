@@ -256,7 +256,7 @@ public class Render2Activity extends Activity implements View.OnTouchListener {
         for (Display.Mode supportedMode : supportedModes) {
             float refreshRate = supportedMode.getRefreshRate();
             if (refreshRate > fps) {
-                fps = refreshRate;
+                // fps = refreshRate;
             }
         }
 
