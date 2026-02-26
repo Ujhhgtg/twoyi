@@ -4,12 +4,6 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-/*
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at https://mozilla.org/MPL/2.0/.
- */
-
 package io.twoyi;
 
 import android.content.Context;
@@ -90,6 +84,9 @@ public class TwoyiStatusManager {
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
         context.startActivity(intent);
-        mShown.set(!mShown.get());
+        boolean current;
+        do {
+            current = mShown.get();
+        } while (!mShown.compareAndSet(current, !current));
     }
 }

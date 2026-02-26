@@ -4,18 +4,6 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-/*
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at https://mozilla.org/MPL/2.0/.
- */
-
-/*
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at https://mozilla.org/MPL/2.0/.
- */
-
 package io.twoyi;
 
 import android.content.Context;
@@ -63,7 +51,7 @@ public class TwoyiSocketServer {
         mContext = context;
     }
 
-    public static TwoyiSocketServer getInstance(Context context) {
+    public static synchronized TwoyiSocketServer getInstance(Context context) {
         if (INSTANCE == null) {
             INSTANCE = new TwoyiSocketServer(context);
         }
@@ -125,10 +113,15 @@ public class TwoyiSocketServer {
             while (!currentThread.isInterrupted()) {
                 byte[] data = new byte[1024];
                 int read = inputStream.read(data);
+                if (read < 0) {
+                    break;
+                }
                 handleData(new String(data, 0, read, StandardCharsets.US_ASCII));
             }
 
         } catch (IOException ignored) {
+        } finally {
+            IOUtils.closeSilently(socket);
         }
     }
 

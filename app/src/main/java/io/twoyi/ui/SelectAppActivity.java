@@ -157,11 +157,9 @@ public class SelectAppActivity extends AppCompatActivity {
             }
         }
 
-        if (true) {
-            int size = specifiedPackages.size();
-            if (size > 1) {
-                specifiedPackages.clear();
-            }
+        // Only allow single package specification
+        if (specifiedPackages.size() > 1) {
+            specifiedPackages.clear();
         }
 
         loadAsync();
@@ -254,9 +252,9 @@ public class SelectAppActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
-    private MenuItem setFilterMenuItem(Menu menu, int id, String key, boolean defalutValue) {
+    private MenuItem setFilterMenuItem(Menu menu, int id, String key, boolean defaultValue) {
         MenuItem menuItem = menu.findItem(id);
-        menuItem.setChecked(AppKV.getBooleanConfig(getApplicationContext(), key, defalutValue));
+        menuItem.setChecked(AppKV.getBooleanConfig(getApplicationContext(), key, defaultValue));
 
         menuItem.setOnMenuItemClickListener(item -> {
             boolean checked = !item.isChecked();

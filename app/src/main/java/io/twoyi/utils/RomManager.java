@@ -307,7 +307,7 @@ public final class RomManager {
 
         long t3 = SystemClock.elapsedRealtime();
 
-        Log.i(TAG, "extract rootfs, read assets: " + (t2 - t1) + " un7z: " + (t3 - t2) + "ret: " + ret);
+        Log.i(TAG, "extract rootfs, read assets: " + (t2 - t1) + " un7z: " + (t3 - t2) + " ret: " + ret);
 
         return ret == 0;
     }
@@ -333,7 +333,7 @@ public final class RomManager {
     }
 
     public static boolean isAndroid12() {
-        return Build.VERSION.PREVIEW_SDK_INT + Build.VERSION.SDK_INT == Build.VERSION_CODES.S;
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.S;
     }
 
     private static void removePartition(Context context, String partition) {
